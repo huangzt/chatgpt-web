@@ -32,10 +32,11 @@ export const useChatStore = defineStore('chat-store', {
       if (rooms.findIndex((item: { uuid: number | null }) => item.uuid === uuid) <= -1 && rooms.length > 0)
         uuid = null
 
-      for (const r of rooms) {
+      for (let i = 0; i < rooms.length; i++) {
+        const r = rooms[i]
         this.history.unshift(r)
         if (uuid == null)
-          uuid = r.uuid
+          uuid = rooms[rooms.length - 1].uuid
         this.chat.unshift({ uuid: r.uuid, data: [] })
         if (uuid === r.uuid)
           this.syncChat(r, callback)
