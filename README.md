@@ -378,4 +378,4 @@ A: 一种可能原因是经过 Nginx 反向代理，开启了 buffer，则 Nginx
 如果你觉得这个项目对你有帮助，请给我点个Star。
 
 ## License
-MIT © [Kerwin1202](./license)
+MIT © [huangzhenting](./license)
