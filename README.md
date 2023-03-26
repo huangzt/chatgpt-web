@@ -211,14 +211,14 @@ http://localhost:3002/
 
 #### Docker compose
 
-[Hub 地址](https://hub.docker.com/repository/docker/kerwin1202/chatgpt-web/general)
+[Hub 地址](https://hub.docker.com/repository/docker/huangzhenting/chatgpt-web/general)
 
 ```yml
 version: '3'
 
 services:
   app:
-    image: kerwin1202/chatgpt-web # 总是使用latest,更新时重新pull该tag镜像即可
+    image: huangzhenting/chatgpt-web # 总是使用latest,更新时重新pull该tag镜像即可
     container_name: chatgptweb
     restart: unless-stopped
     ports:
@@ -378,4 +378,4 @@ A: 一种可能原因是经过 Nginx 反向代理，开启了 buffer，则 Nginx
 如果你觉得这个项目对你有帮助，请给我点个Star。
 
 ## License
-MIT © [Kerwin1202](./license)
+MIT © [huangzhenting](./license)
