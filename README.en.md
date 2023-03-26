@@ -205,14 +205,14 @@ http://localhost:3002/
 
 #### Docker Compose
 
-[Hub Address](https://hub.docker.com/repository/docker/kerwin1202/chatgpt-web/general)
+[Hub Address](https://hub.docker.com/repository/docker/huangzhenting/chatgpt-web/general)
 
 ```yml
 version: '3'
 
 services:
   app:
-    image: kerwin1202/chatgpt-web # always use latest, pull the tag image again when updating
+    image: huangzhenting/chatgpt-web # always use latest, pull the tag image again when updating
     container_name: chatgptweb
     restart: unless-stopped
     ports:
