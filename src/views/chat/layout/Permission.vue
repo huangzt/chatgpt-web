@@ -171,7 +171,6 @@ async function handleRegister() {
             <NInput v-model:value="username" type="text" :placeholder="$t('common.email')" class="mb-2" />
             <NInput v-model:value="password" type="password" :placeholder="$t('common.password')" class="mb-2" @input="handlePasswordInput" />
             <NInput
-              v-if="showConfirmPassword"
               v-model:value="confirmPassword"
               type="password"
               :placeholder="$t('common.passwordConfirm')"
