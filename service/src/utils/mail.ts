@@ -24,7 +24,7 @@ export async function sendVerifyMailAdmin(toMail: string, verifyUrl: string) {
   mailHtml = mailHtml.replace(/\${TO_MAIL}/g, toMail)
   mailHtml = mailHtml.replace(/\${VERIFY_URL}/g, verifyUrl)
   mailHtml = mailHtml.replace(/\${SITE_TITLE}/g, config.siteConfig.siteTitle)
-  sendMail(config.mailConfig.smtpUserName, `${config.siteConfig.siteTitle} 账号申请`, mailHtml, config.mailConfig)
+  sendMail(config.rootUser, `${config.siteConfig.siteTitle} 账号申请`, mailHtml, config.mailConfig)
 }
 
 export async function sendNoticeMail(toMail: string) {

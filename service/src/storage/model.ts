@@ -80,6 +80,7 @@ export class Config {
     public reverseProxy?: string,
     public socksProxy?: string,
     public httpsProxy?: string,
+    public rootUser?: string,
     public siteConfig?: SiteConfig,
     public mailConfig?: MailConfig,
   ) { }

@@ -33,6 +33,7 @@ export async function getOriginConfig() {
         ? (`${process.env.SOCKS_PROXY_HOST}:${process.env.SOCKS_PROXY_PORT}`)
         : '',
       process.env.HTTPS_PROXY,
+      process.env.ROOT_USER,
       new SiteConfig(
         process.env.SITE_TITLE || 'ChatGpt Web',
         isNotEmptyString(process.env.AUTH_SECRET_KEY),
