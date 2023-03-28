@@ -31,3 +31,5 @@ coverage
 # Environment variables files
 /service/.env
 /docker-compose/nginx/html
+/docker-compose/docker-compose-dev.yml
+/docker-compose/mongodb/
