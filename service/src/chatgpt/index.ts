@@ -35,6 +35,7 @@ export async function initApi() {
   if (!config.apiKey && !config.accessToken)
     throw new Error('Missing OPENAI_API_KEY or OPENAI_ACCESS_TOKEN environment variable')
 
+  const disableDebug: boolean = process.env.OPENAI_API_DISABLE_DEBUG === 'true'
   if (isNotEmptyString(config.apiKey)) {
     const OPENAI_API_BASE_URL = process.env.OPENAI_API_BASE_URL
     const OPENAI_API_MODEL = process.env.OPENAI_API_MODEL
@@ -43,7 +44,7 @@ export async function initApi() {
     const options: ChatGPTAPIOptions = {
       apiKey: config.apiKey,
       completionParams: { model },
-      debug: true,
+      debug: !disableDebug,
     }
     // increase max token limit if use gpt-4
     if (model.toLowerCase().includes('gpt-4')) {
@@ -70,7 +71,7 @@ export async function initApi() {
     const OPENAI_API_MODEL = process.env.OPENAI_API_MODEL
     const options: ChatGPTUnofficialProxyAPIOptions = {
       accessToken: config.accessToken,
-      debug: true,
+      debug: !disableDebug,
     }
     if (isNotEmptyString(OPENAI_API_MODEL))
       options.model = OPENAI_API_MODEL
