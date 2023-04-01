@@ -9,8 +9,7 @@ const authStore = useAuthStore()
 const show = ref(false)
 
 async function handleLogout() {
-  authStore.removeToken()
-  window.location.reload()
+  await authStore.removeToken()
 }
 </script>
 
