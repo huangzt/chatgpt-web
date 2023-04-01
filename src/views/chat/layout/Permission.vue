@@ -59,7 +59,6 @@ async function handleVerify(verifytoken: string) {
   }
   catch (error: any) {
     ms.error(error.message ?? 'error')
-    authStore.removeToken()
   }
   finally {
     loading.value = false
