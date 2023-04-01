@@ -247,6 +247,10 @@ services:
       SOCKS_PROXY_HOST: xxx
       # Socks代理端口，可选，和 SOCKS_PROXY_HOST 一起时生效
       SOCKS_PROXY_PORT: xxx
+      # Socks代理用户名，可选，和 SOCKS_PROXY_HOST & SOCKS_PROXY_PORT 一起时生效
+      SOCKS_PROXY_USERNAME:
+      # Socks代理密码，可选，和 SOCKS_PROXY_HOST & SOCKS_PROXY_PORT 一起时生效
+      SOCKS_PROXY_PASSWORD:
       # HTTPS 代理，可选，支持 http，https，socks5
       HTTPS_PROXY: http://xxx:7890
       # 访问jwt加密参数，可选 不为空则允许登录 同时需要设置 MONGODB_URL
