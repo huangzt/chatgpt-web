@@ -38,8 +38,6 @@ export const useChatStore = defineStore('chat-store', {
         if (uuid == null)
           uuid = rooms[rooms.length - 1].uuid
         this.chat.unshift({ uuid: r.uuid, data: [] })
-        if (uuid === r.uuid)
-          this.syncChat(r, callback)
       }
       if (uuid == null) {
         uuid = Date.now()
@@ -47,6 +45,7 @@ export const useChatStore = defineStore('chat-store', {
       }
       this.active = uuid
       this.reloadRoute(uuid)
+      callback && callback()
     },
 
     async syncChat(h: Chat.History, callback: () => void) {
@@ -54,8 +53,8 @@ export const useChatStore = defineStore('chat-store', {
       if (chatIndex <= -1 || this.chat[chatIndex].data.length <= 0) {
         const chatData = (await fetchGetChatHistory(h.uuid)).data
         this.chat.unshift({ uuid: h.uuid, data: chatData })
-        callback && callback()
       }
+      callback && callback()
     },
 
     setUsingContext(context: boolean) {
