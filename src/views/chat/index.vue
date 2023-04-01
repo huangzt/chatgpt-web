@@ -139,7 +139,7 @@ async function onConversation() {
                 text: lastText + data.text ?? '',
                 inversion: false,
                 error: false,
-                loading: false,
+                loading: true,
                 conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
                 requestOptions: { prompt: message, options: { ...options } },
               },
@@ -155,10 +155,11 @@ async function onConversation() {
             scrollToBottomIfAtBottom()
           }
           catch (error) {
-          //
+            //
           }
         },
       })
+      updateChatSome(+uuid, dataSources.value.length - 1, { loading: false })
     }
 
     await fetchChatAPIOnce()
@@ -272,7 +273,7 @@ async function onRegenerate(index: number) {
                 text: lastText + data.text ?? '',
                 inversion: false,
                 error: false,
-                loading: false,
+                loading: true,
                 conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
                 requestOptions: { prompt: message, ...options },
               },
@@ -290,6 +291,7 @@ async function onRegenerate(index: number) {
           }
         },
       })
+      updateChatSome(+uuid, index, { loading: false })
     }
     await fetchChatAPIOnce()
   }
@@ -493,11 +495,7 @@ onUnmounted(() => {
       @toggle-using-context="toggleUsingContext"
     />
     <main class="flex-1 overflow-hidden">
-      <div
-        id="scrollRef"
-        ref="scrollRef"
-        class="h-full overflow-hidden overflow-y-auto"
-      >
+      <div id="scrollRef" ref="scrollRef" class="h-full overflow-hidden overflow-y-auto">
         <div
           id="image-wrapper"
           class="w-full max-w-screen-xl m-auto dark:bg-[#101014]"
