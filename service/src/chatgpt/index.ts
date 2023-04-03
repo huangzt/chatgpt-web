@@ -136,10 +136,13 @@ async function fetchBalance() {
     : 'https://api.openai.com'
 
   try {
-    const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_API_KEY}` }
-    const response = await axios.get(`${API_BASE_URL}/dashboard/billing/credit_grants`, { headers })
+    let headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${config.accessToken}` }
+    let response = await axios.post(`${API_BASE_URL}/dashboard/onboarding/login`, {}, { headers })
+    const sensitive_id = response.data.user.session.sensitive_id
+    headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sensitive_id}` }
+    response = await axios.get(`${API_BASE_URL}/dashboard/billing/credit_grants`, { headers })
     const balance = response.data.total_available ?? 0
-    return Promise.resolve(balance.toFixed(3))
+    return Promise.resolve(balance)
   }
   catch {
     return Promise.resolve('-')
