@@ -14,7 +14,7 @@ import { useUsingContext } from './hooks/useUsingContext'
 import HeaderComponent from './components/Header/index.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useAuthStoreWithout, useChatStore, usePromptStore } from '@/store'
+import { useChatStore, usePromptStore } from '@/store'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
 import { debounce } from '@/utils/functions/debounce'
@@ -28,7 +28,6 @@ const dialog = useDialog()
 const ms = useMessage()
 
 const chatStore = useChatStore()
-const authStore = useAuthStoreWithout()
 
 useCopyCode()
 
