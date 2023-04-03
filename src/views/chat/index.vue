@@ -505,18 +505,16 @@ const footerClass = computed(() => {
 })
 
 onMounted(() => {
-  if (authStore.session == null || !authStore.session.auth || authStore.token) {
-    firstLoading.value = true
-    debounce(() => {
-      // 直接刷 极小概率不请求
-      chatStore.syncChat({ uuid: Number(uuid) } as Chat.History, () => {
-        firstLoading.value = false
-        scrollToBottom()
-        if (inputRef.value && !isMobile.value)
-          inputRef.value?.focus()
-      })
-    }, 200)()
-  }
+  firstLoading.value = true
+  debounce(() => {
+    // 直接刷 极小概率不请求
+    chatStore.syncChat({ uuid: Number(uuid) } as Chat.History, undefined, () => {
+      firstLoading.value = false
+      scrollToBottom()
+      if (inputRef.value && !isMobile.value)
+        inputRef.value?.focus()
+    })
+  }, 200)()
 })
 
 onUnmounted(() => {
