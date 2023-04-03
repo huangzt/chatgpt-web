@@ -72,11 +72,13 @@ export async function initApi() {
       accessToken: config.accessToken,
       debug: !config.apiDisableDebug,
     }
+
     if (isNotEmptyString(OPENAI_API_MODEL))
       options.model = OPENAI_API_MODEL
 
-    if (isNotEmptyString(config.reverseProxy))
-      options.apiReverseProxyUrl = config.reverseProxy
+    options.apiReverseProxyUrl = isNotEmptyString(config.reverseProxy)
+      ? config.reverseProxy
+      : 'https://bypass.churchless.tech/api/conversation'
 
     await setupProxy(options)
 
