@@ -437,7 +437,7 @@ router.post('/verifyadmin', async (req, res) => {
 
 router.post('/setting-base', rootAuth, async (req, res) => {
   try {
-    const { apiKey, apiModel, apiBaseUrl, accessToken, timeoutMs, socksProxy, socksAuth, httpsProxy } = req.body as Config
+    const { apiKey, apiModel, apiBaseUrl, accessToken, timeoutMs, socksProxy, socksAuth, httpsProxy, reverseProxy } = req.body as Config
 
     if (apiKey == null && accessToken == null)
       throw new Error('Missing OPENAI_API_KEY or OPENAI_ACCESS_TOKEN environment variable.')
@@ -451,6 +451,7 @@ router.post('/setting-base', rootAuth, async (req, res) => {
     thisConfig.socksProxy = socksProxy
     thisConfig.socksAuth = socksAuth
     thisConfig.httpsProxy = httpsProxy
+    thisConfig.reverseProxy = reverseProxy
     await updateConfig(thisConfig)
     clearConfigCache()
     initApi()
