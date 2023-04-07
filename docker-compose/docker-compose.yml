@@ -43,6 +43,8 @@ services:
       MONGODB_URL: 'mongodb://chatgpt:xxxx@database:27017'
       # 网站是否开启注册
       REGISTER_ENABLED: false
+      # 新用户审核
+      REGISTER_REVIEW: false
       # 开启注册之后 网站注册允许的邮箱后缀 如果空 则允许任意后缀
       REGISTER_MAILS: '@qq.com,@sina.com,@163.com'
       # 开启注册之后 密码加密的盐

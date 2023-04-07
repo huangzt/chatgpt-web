@@ -8,7 +8,26 @@ import { auth } from './middleware/auth'
 import { clearConfigCache, getCacheConfig, getOriginConfig } from './storage/config'
 import type { ChatOptions, Config, MailConfig, SiteConfig, UserInfo } from './storage/model'
 import { Status } from './storage/model'
-import { clearChat, createChatRoom, createUser, deleteAllChatRooms, deleteChat, deleteChatRoom, existsChatRoom, getChat, getChatRooms, getChats, getUser, getUserById, insertChat, renameChatRoom, updateChat, updateConfig, updateUserInfo, verifyUser, verifyUserAdmin } from './storage/mongo'
+import {
+  clearChat,
+  createChatRoom,
+  createUser,
+  deleteAllChatRooms,
+  deleteChat,
+  deleteChatRoom,
+  existsChatRoom,
+  getChat,
+  getChatRooms,
+  getChats,
+  getUser,
+  getUserById,
+  insertChat,
+  renameChatRoom,
+  updateChat,
+  updateConfig,
+  updateUserInfo,
+  verifyUser,
+} from './storage/mongo'
 import { limiter } from './middleware/limiter'
 import { isEmail, isNotEmptyString } from './utils/is'
 import { sendNoticeMail, sendTestMail, sendVerifyMail, sendVerifyMailAdmin } from './utils/mail'
@@ -131,10 +150,15 @@ router.get('/chat-hisroty', auth, async (req, res) => {
           loading: false,
           conversationOptions: {
             parentMessageId: c.options.messageId,
+            conversationId: c.options.conversationId,
           },
           requestOptions: {
             prompt: c.prompt,
             parentMessageId: c.options.parentMessageId,
+            options: {
+              parentMessageId: c.options.messageId,
+              conversationId: c.options.conversationId,
+            },
           },
         })
       }
@@ -323,7 +347,9 @@ router.post('/user-login', async (req, res) => {
       throw new Error('用户名或密码为空 | Username or password is empty')
 
     const user = await getUser(username)
-    if (user == null || user.status !== Status.Normal || user.password !== md5(password)) {
+    if (user == null
+      || user.status !== Status.Normal
+      || user.password !== md5(password)) {
       if (user != null && user.status === Status.PreVerify)
         throw new Error('请去邮箱中验证 | Please verify in the mailbox')
       if (user != null && user.status === Status.AdminVerify)
@@ -372,9 +398,17 @@ router.post('/verify', async (req, res) => {
       res.send({ status: 'Fail', message: '邮箱已存在 | The email exists', data: null })
       return
     }
-    await verifyUser(username)
-    await sendVerifyMailAdmin(username, await getUserVerifyUrlAdmin(username))
-    res.send({ status: 'Success', message: '验证成功, 请等待管理员开通 | Verify successfully, Please wait for the admin to activate', data: null })
+    const config = await getCacheConfig()
+    let message = '验证成功 | Verify successfully'
+    if (config.siteConfig.registerReview) {
+      await verifyUser(username, Status.AdminVerify)
+      await sendVerifyMailAdmin(process.env.ROOT_USER, username, await getUserVerifyUrlAdmin(username))
+      message = '验证成功, 请等待管理员开通 | Verify successfully, Please wait for the admin to activate'
+    }
+    else {
+      await verifyUser(username, Status.Normal)
+    }
+    res.send({ status: 'Success', message, data: null })
   }
   catch (error) {
     res.send({ status: 'Fail', message: error.message, data: null })
@@ -389,10 +423,10 @@ router.post('/verifyadmin', async (req, res) => {
     const username = await checkUserVerifyAdmin(token)
     const user = await getUser(username)
     if (user != null && user.status === Status.Normal) {
-      res.send({ status: 'Fail', message: '邮箱已存在 | The email exists', data: null })
+      res.send({ status: 'Fail', message: '邮箱已开通 | The email has been opened.', data: null })
       return
     }
-    await verifyUserAdmin(username)
+    await verifyUser(username, Status.Normal)
     await sendNoticeMail(username)
     res.send({ status: 'Success', message: '开通成功 | Activate successfully', data: null })
   }

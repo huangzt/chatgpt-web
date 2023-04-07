@@ -151,14 +151,9 @@ export async function getUserById(userId: string): Promise<UserInfo> {
   return await userCol.findOne({ _id: new ObjectId(userId) }) as UserInfo
 }
 
-export async function verifyUser(email: string) {
+export async function verifyUser(email: string, status: Status) {
   email = email.toLowerCase()
-  return await userCol.updateOne({ email }, { $set: { status: Status.AdminVerify, verifyTime: new Date().toLocaleString() } })
-}
-
-export async function verifyUserAdmin(email: string) {
-  email = email.toLowerCase()
-  return await userCol.updateOne({ email }, { $set: { status: Status.Normal, verifyTime: new Date().toLocaleString() } })
+  return await userCol.updateOne({ email }, { $set: { status, verifyTime: new Date().toLocaleString() } })
 }
 
 export async function getConfig(): Promise<Config> {
