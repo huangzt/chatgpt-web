@@ -245,7 +245,7 @@ async function onRegenerate(index: number) {
       error: false,
       loading: true,
       conversationOptions: null,
-      requestOptions: { prompt: message, ...options },
+      requestOptions: { prompt: message, options: { ...options } },
     },
   )
 
@@ -279,7 +279,7 @@ async function onRegenerate(index: number) {
                 error: false,
                 loading: true,
                 conversationOptions: { conversationId: data.conversationId, parentMessageId: data.id },
-                requestOptions: { prompt: message, ...options },
+                requestOptions: { prompt: message, options: { ...options } },
               },
             )
 
@@ -323,7 +323,7 @@ async function onRegenerate(index: number) {
         error: true,
         loading: false,
         conversationOptions: null,
-        requestOptions: { prompt: message, ...options },
+        requestOptions: { prompt: message, options: { ...options } },
       },
     )
   }
@@ -445,9 +445,9 @@ async function loadMoreMessage(event: any) {
     )
   }, () => {
     allmsg && allmsg.destroy()
-    allmsg = ms.warning('没有更多了', {
-      duration: 1000,
-    })
+    // allmsg = ms.warning('没有更多了', {
+    //   duration: 1000,
+    // })
   })
 }
 

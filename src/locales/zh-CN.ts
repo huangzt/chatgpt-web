@@ -36,7 +36,7 @@ export default {
   },
   chat: {
     newChatButton: '新建聊天',
-    placeholder: '来说点什么吧...（Shift + Enter = 换行）',
+    placeholder: '来说点什么吧...（Shift + Enter = 换行，"/" 触发提示词）',
     placeholderMobile: '来说点什么...',
     copy: '复制',
     copied: '复制成功',
@@ -87,6 +87,7 @@ export default {
     siteTitle: '网站标题',
     siteDomain: '域名 不含/',
     registerEnabled: '新用户',
+    registerReview: '新用户审核',
     registerMails: '邮箱后缀',
     apiBaseUrl: '接口地址',
     apiModel: 'Api 模型',
@@ -94,6 +95,7 @@ export default {
     loginEnabled: '注册登录',
     loginSalt: '登录混淆盐',
     loginSaltTip: '变更会导致所有已登录失效',
+    monthlyUsage: '本月使用量',
   },
   store: {
     siderButton: '提示词商店',

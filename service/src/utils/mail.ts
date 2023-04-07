@@ -15,16 +15,16 @@ export async function sendVerifyMail(toMail: string, verifyUrl: string) {
   sendMail(toMail, `${config.siteConfig.siteTitle} 账号验证`, mailHtml, config.mailConfig)
 }
 
-export async function sendVerifyMailAdmin(toMail: string, verifyUrl: string) {
+export async function sendVerifyMailAdmin(toMail: string, verifyName: string, verifyUrl: string) {
   const config = (await getCacheConfig())
 
   const templatesPath = path.join(__dirname, 'templates')
   const mailTemplatePath = path.join(templatesPath, 'mail.admin.template.html')
   let mailHtml = fs.readFileSync(mailTemplatePath, 'utf8')
-  mailHtml = mailHtml.replace(/\${TO_MAIL}/g, toMail)
+  mailHtml = mailHtml.replace(/\${TO_MAIL}/g, verifyName)
   mailHtml = mailHtml.replace(/\${VERIFY_URL}/g, verifyUrl)
   mailHtml = mailHtml.replace(/\${SITE_TITLE}/g, config.siteConfig.siteTitle)
-  sendMail(config.rootUser, `${config.siteConfig.siteTitle} 账号申请`, mailHtml, config.mailConfig)
+  sendMail(toMail, `${config.siteConfig.siteTitle} 账号申请`, mailHtml, config.mailConfig)
 }
 
 export async function sendNoticeMail(toMail: string) {

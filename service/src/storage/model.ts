@@ -45,9 +45,11 @@ export class ChatRoom {
 export class ChatOptions {
   parentMessageId?: string
   messageId?: string
-  constructor(parentMessageId?: string, messageId?: string) {
+  conversationId?: string
+  constructor(parentMessageId?: string, messageId?: string, conversationId?: string) {
     this.parentMessageId = parentMessageId
     this.messageId = messageId
+    this.conversationId = conversationId
   }
 }
 
@@ -94,6 +96,7 @@ export class SiteConfig {
     public loginEnabled?: boolean,
     public loginSalt?: string,
     public registerEnabled?: boolean,
+    public registerReview?: boolean,
     public registerMails?: string,
     public siteDomain?: string,
   ) { }
