@@ -26,7 +26,7 @@ services:
       # 每小时最大请求次数，可选，默认无限
       MAX_REQUEST_PER_HOUR: 0
       # 超时，单位毫秒，可选
-      TIMEOUT_MS: 60000
+      TIMEOUT_MS: 600000
       # Socks代理，可选，和 SOCKS_PROXY_PORT 一起时生效
       SOCKS_PROXY_HOST:
       # Socks代理端口，可选，和 SOCKS_PROXY_HOST 一起时生效
@@ -59,6 +59,13 @@ services:
       SMTP_TSL: true
       SMTP_USERNAME: ${SMTP_USERNAME}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
+      # 是否开启敏感词审核, 因为响应结果是流式 所以暂时没审核
+      AUDIT_ENABLED: false
+      # https://ai.baidu.com/ai-doc/ANTIPORN/Vk3h6xaga
+      AUDIT_PROVIDER: baidu
+      AUDIT_API_KEY: 
+      AUDIT_API_SECRET:
+      AUDIT_TEXT_LABEL:
     links:
       - database
 

@@ -185,7 +185,6 @@ pnpm dev
 - `SOCKS_PROXY_HOST` 和 `SOCKS_PROXY_PORT` 一起时生效，可选
 - `SOCKS_PROXY_PORT` 和 `SOCKS_PROXY_HOST` 一起时生效，可选
 - `HTTPS_PROXY` 支持 `http`，`https`, `socks5`，可选
-- `ALL_PROXY` 支持 `http`，`https`, `socks5`，可选
 
 ## 打包
 
@@ -242,7 +241,7 @@ services:
       # 每小时最大请求次数，可选，默认无限
       MAX_REQUEST_PER_HOUR: 0
       # 超时，单位毫秒，可选
-      TIMEOUT_MS: 60000
+      TIMEOUT_MS: 600000
       # Socks代理，可选，和 SOCKS_PROXY_PORT 一起时生效
       SOCKS_PROXY_HOST: xxx
       # Socks代理端口，可选，和 SOCKS_PROXY_HOST 一起时生效
@@ -275,6 +274,13 @@ services:
       SMTP_TSL: true
       SMTP_USERNAME: noreply@examile.com
       SMTP_PASSWORD: xxx
+      # 是否开启敏感词审核, 因为响应结果是流式 所以暂时没审核
+      AUDIT_ENABLED: false
+      # https://ai.baidu.com/ai-doc/ANTIPORN/Vk3h6xaga
+      AUDIT_PROVIDER: baidu
+      AUDIT_API_KEY: xxx
+      AUDIT_API_SECRET: xxx
+      AUDIT_TEXT_LABEL: xxx
     links:
       - database
 
@@ -320,7 +326,6 @@ volumes:
 | `SOCKS_PROXY_USERNAME`   | 可选，和 `SOCKS_PROXY_HOST` 一起时生效 | Socks代理用户名    |
 | `SOCKS_PROXY_PASSWORD`   | 可选，和 `SOCKS_PROXY_HOST` 一起时生效 | Socks代理密码    |
 | `HTTPS_PROXY`   | 可选 | HTTPS 代理，支持 http，https, socks5    |
-| `ALL_PROXY`   | 可选 | 所有代理 代理，支持 http，https, socks5    |
 
 > 注意: `Railway` 修改环境变量会重新 `Deploy`
 
