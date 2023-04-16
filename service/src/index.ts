@@ -437,7 +437,7 @@ router.post('/user-login', async (req, res) => {
     if (user == null
       || user.status !== Status.Normal
       || user.password !== md5(password)) {
-      if (user.password !== md5(password))
+      if (user == null || user.password !== md5(password))
         throw new Error('用户不存在或密码错误 | User does not exist or incorrect password.')
       if (user != null && user.status === Status.PreVerify)
         throw new Error('请去邮箱中验证 | Please verify in the mailbox')
