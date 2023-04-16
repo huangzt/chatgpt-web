@@ -178,7 +178,7 @@ async function fetchBalance() {
 
   try {
     // 获取API限额
-    let response = await fetch(urlSubscription, { headers })
+    let response = await fetch(urlSubscription, { agent: await getAgent(), headers })
     if (!response.ok) {
       console.error('您的账户已被封禁，请登录OpenAI进行查看。')
       return
@@ -187,7 +187,7 @@ async function fetchBalance() {
     const totalAmount = subscriptionData.hard_limit_usd
 
     // 获取已使用量
-    response = await fetch(urlUsage, { headers })
+    response = await fetch(urlUsage, { agent: await getAgent(), headers })
     const usageData = await response.json()
     const totalUsage = usageData.total_usage / 100
 
@@ -244,6 +244,29 @@ async function setupProxy(options: ChatGPTAPIOptions | ChatGPTUnofficialProxyAPI
       }
     }
   }
+}
+
+async function getAgent() {
+  const config = await getCacheConfig()
+  if (isNotEmptyString(config.socksProxy)) {
+    const agent = new SocksProxyAgent({
+      hostname: config.socksProxy.split(':')[0],
+      port: parseInt(config.socksProxy.split(':')[1]),
+      userId: isNotEmptyString(config.socksAuth) ? config.socksAuth.split(':')[0] : undefined,
+      password: isNotEmptyString(config.socksAuth) ? config.socksAuth.split(':')[1] : undefined,
+    })
+    return agent
+  }
+  else {
+    if (isNotEmptyString(config.httpsProxy)) {
+      const httpsProxy = config.httpsProxy
+      if (httpsProxy) {
+        const agent = new HttpsProxyAgent(httpsProxy)
+        return agent
+      }
+    }
+  }
+  return null
 }
 
 function currentModel(): ApiModel {
