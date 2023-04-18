@@ -14,7 +14,7 @@ import { useUsingContext } from './hooks/useUsingContext'
 import HeaderComponent from './components/Header/index.vue'
 import { HoverButton, SvgIcon } from '@/components/common'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useChatStore, usePromptStore } from '@/store'
+import { useAuthStore, useChatStore, usePromptStore } from '@/store'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
 import { debounce } from '@/utils/functions/debounce'
@@ -26,6 +26,7 @@ const openLongReply = import.meta.env.VITE_GLOB_OPEN_LONG_REPLY === 'true'
 const route = useRoute()
 const dialog = useDialog()
 const ms = useMessage()
+const authStore = useAuthStore()
 
 const chatStore = useChatStore()
 
@@ -135,7 +136,7 @@ async function onConversation() {
             chunk = responseText.substring(lastIndex)
           try {
             const data = JSON.parse(chunk)
-            const usage = data.detail.usage
+            const usage = (data.detail && data.detail.usage)
               ? {
                   completion_tokens: data.detail.usage.completion_tokens || null,
                   prompt_tokens: data.detail.usage.prompt_tokens || null,
@@ -158,7 +159,7 @@ async function onConversation() {
               },
             )
 
-            if (openLongReply && data.detail.choices[0].finish_reason === 'length') {
+            if (openLongReply && data.detail && data.detail.choices.length > 0 && data.detail.choices[0].finish_reason === 'length') {
               options.parentMessageId = data.id
               lastText = data.text
               message = ''
@@ -278,7 +279,7 @@ async function onRegenerate(index: number) {
             chunk = responseText.substring(lastIndex)
           try {
             const data = JSON.parse(chunk)
-            const usage = data.detail.usage
+            const usage = (data.detail && data.detail.usage)
               ? {
                   completion_tokens: data.detail.usage.completion_tokens || null,
                   prompt_tokens: data.detail.usage.prompt_tokens || null,
@@ -301,7 +302,7 @@ async function onRegenerate(index: number) {
               },
             )
 
-            if (openLongReply && data.detail.choices[0].finish_reason === 'length') {
+            if (openLongReply && data.detail && data.detail.choices.length > 0 && data.detail.choices[0].finish_reason === 'length') {
               options.parentMessageId = data.id
               lastText = data.text
               message = ''
@@ -570,7 +571,7 @@ onUnmounted(() => {
                   :date-time="item.dateTime"
                   :text="item.text"
                   :inversion="item.inversion"
-                  :usage="item.usage || undefined"
+                  :usage="item && item.usage || undefined"
                   :error="item.error"
                   :loading="item.loading"
                   @regenerate="onRegenerate(index)"
@@ -613,6 +614,7 @@ onUnmounted(() => {
               <NInput
                 ref="inputRef"
                 v-model:value="prompt"
+                :disabled="authStore.token === undefined"
                 type="textarea"
                 :placeholder="placeholder"
                 :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }"
