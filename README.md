@@ -48,6 +48,7 @@
 			- [Docker 参数示例](#docker-参数示例)
 			- [Docker build \& Run](#docker-build--run)
 			- [Docker compose](#docker-compose)
+			- [防止爬虫抓取](#防止爬虫抓取)
 		- [使用 Railway 部署](#使用-railway-部署)
 			- [Railway 环境变量](#railway-环境变量)
 		- [手动打包](#手动打包)
@@ -74,7 +75,7 @@
 1. 你应该首先使用 `API` 方式
 2. 使用 `API` 时，如果网络不通，那是国内被墙了，你需要自建代理，绝对不要使用别人的公开代理，那是危险的。
 3. 使用 `accessToken` 方式时反向代理将向第三方暴露您的访问令牌，这样做应该不会产生任何不良影响，但在使用这种方法之前请考虑风险。
-4. 使用 `accessToken` 时，不管你是国内还是国外的机器，都会使用代理。默认代理为 [acheong08](https://github.com/acheong08) 大佬的 `https://bypass.churchless.tech/api/conversation`，这不是后门也不是监听，除非你有能力自己翻过 `CF` 验证，用前请知悉。[社区代理](https://github.com/transitive-bullshit/chatgpt-api#reverse-proxy)（注意：只有这两个是推荐，其他第三方来源，请自行甄别）
+4. 使用 `accessToken` 时，不管你是国内还是国外的机器，都会使用代理。默认代理为 [pengzhile](https://github.com/pengzhile) 大佬的 `https://ai.fakeopen.com/api/conversation`，这不是后门也不是监听，除非你有能力自己翻过 `CF` 验证，用前请知悉。[社区代理](https://github.com/transitive-bullshit/chatgpt-api#reverse-proxy)（注意：只有这两个是推荐，其他第三方来源，请自行甄别）
 5. 把项目发布到公共网络时，你应该设置 `AUTH_SECRET_KEY` 变量添加你的密码访问权限，你也应该修改 `index.html` 中的 `title`，防止被关键词搜索到。
 
 切换方式：
@@ -186,7 +187,7 @@ pnpm dev
 `ACCESS_TOKEN` 可用：
 
 - `OPENAI_ACCESS_TOKEN`  和 `OPENAI_API_KEY` 二选一，同时存在时，`OPENAI_API_KEY` 优先
-- `API_REVERSE_PROXY` 设置反向代理，可选，默认：`https://bypass.churchless.tech/api/conversation`，[社区](https://github.com/transitive-bullshit/chatgpt-api#reverse-proxy)（注意：只有这两个是推荐，其他第三方来源，请自行甄别）
+- `API_REVERSE_PROXY` 设置反向代理，可选，默认：`https://ai.fakeopen.com/api/conversation`，[社区](https://github.com/transitive-bullshit/chatgpt-api#reverse-proxy)（注意：只有这两个是推荐，其他第三方来源，请自行甄别）
 
 通用：
 
@@ -270,7 +271,7 @@ services:
       # mongodb 的连接字符串
       MONGODB_URL: 'mongodb://chatgpt:xxxx@database:27017'
       # 网站是否开启注册
-      REGISTER_ENABLED: true
+      REGISTER_ENABLED: 'true'
       # 开启注册之后 网站注册允许的邮箱后缀 如果空 则允许任意后缀
       REGISTER_MAILS: '@qq.com,@sina.com,@163.com'
       # 开启注册之后 密码加密的盐
@@ -282,11 +283,11 @@ services:
       # 开启注册之后 发送验证邮箱配置
       SMTP_HOST: smtp.exmail.qq.com
       SMTP_PORT: 465
-      SMTP_TSL: true
+      SMTP_TSL: 'true'
       SMTP_USERNAME: noreply@examile.com
       SMTP_PASSWORD: xxx
       # 是否开启敏感词审核, 因为响应结果是流式 所以暂时没审核
-      AUDIT_ENABLED: false
+      AUDIT_ENABLED: 'false'
       # https://ai.baidu.com/ai-doc/ANTIPORN/Vk3h6xaga
       AUDIT_PROVIDER: baidu
       AUDIT_API_KEY: xxx
@@ -315,6 +316,20 @@ volumes:
 ```
 - `OPENAI_API_BASE_URL`  可选，设置 `OPENAI_API_KEY` 时可用
 - `OPENAI_API_MODEL`  可选，设置 `OPENAI_API_KEY` 时可用
+
+#### 防止爬虫抓取
+
+**nginx**
+
+将下面配置填入nginx配置文件中，可以参考 `docker-compose/nginx/nginx.conf` 文件中添加反爬虫的方法
+
+```
+    # 防止爬虫抓取
+    if ($http_user_agent ~* "360Spider|JikeSpider|Spider|spider|bot|Bot|2345Explorer|curl|wget|webZIP|qihoobot|Baiduspider|Googlebot|Googlebot-Mobile|Googlebot-Image|Mediapartners-Google|Adsbot-Google|Feedfetcher-Google|Yahoo! Slurp|Yahoo! Slurp China|YoudaoBot|Sosospider|Sogou spider|Sogou web spider|MSNBot|ia_archiver|Tomato Bot|NSPlayer|bingbot"){
+      return 403;
+    }
+```
+
 ###  使用 Railway 部署
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/yytmgc)
