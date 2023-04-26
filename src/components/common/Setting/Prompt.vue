@@ -12,7 +12,7 @@ const chatStore = useChatStore()
 const currentChatHistory = computed(() => chatStore.getChatHistoryByCurrentActive)
 const ms = useMessage()
 const testing = ref(false)
-const title = `Prompt For [${currentChatHistory.value?.title}]`
+const title = `设定系统提示 [${currentChatHistory.value?.title}]`
 
 interface Props {
   visible: boolean
@@ -60,7 +60,7 @@ async function handleSaveChatRoomPrompt() {
     <NInput
       :value="currentChatHistory && currentChatHistory.prompt"
       type="textarea"
-      :autosize="{ minRows: 4, maxRows: 10 }" placeholder="Prompt for this room, If empty will use Settings ->  Advanced -> Role" @input="(val) => { if (currentChatHistory) currentChatHistory.prompt = val }"
+      :autosize="{ minRows: 4, maxRows: 10 }" placeholder="设定本对话的系统提示，如果为空将使用默认设置 -> 高级 -> 角色设定" @input="(val) => { if (currentChatHistory) currentChatHistory.prompt = val }"
     />
     <template #footer>
       <NSpace justify="end">
