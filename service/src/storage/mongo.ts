@@ -114,8 +114,9 @@ export async function getChats(roomId: number, lastId?: number) {
     lastId = new Date().getTime()
   const query = { roomId, uuid: { $lt: lastId }, status: { $ne: Status.Deleted } }
   const sort = { dateTime: -1 }
-  const limit = 20
-  const cursor = await chatCol.find(query).sort(sort).limit(limit)
+  // const limit = 20
+  // const cursor = await chatCol.find(query).sort(sort).limit(limit)
+  const cursor = await chatCol.find(query).sort(sort)
   const chats = []
   await cursor.forEach(doc => chats.push(doc))
   chats.reverse()
