@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import type { Ref } from 'vue'
-import { computed, defineAsyncComponent, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import type { MessageReactive } from 'naive-ui'
@@ -536,10 +536,6 @@ const footerClass = computed(() => {
 onMounted(() => {
   firstLoading.value = true
   handleSyncChat()
-})
-
-watch(() => chatStore.active, (newVal, oldVal) => {
-  // handleSyncChat()
 })
 
 onUnmounted(() => {

@@ -4,30 +4,16 @@ import { NInput, NPopconfirm, NScrollbar, NSpin } from 'naive-ui'
 import { SvgIcon } from '@/components/common'
 import { useAppStore, useChatStore } from '@/store'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
-import { useAuthStoreWithout } from '@/store/modules/auth'
 import { debounce } from '@/utils/functions/debounce'
 
 const { isMobile } = useBasicLayout()
 
 const appStore = useAppStore()
 const chatStore = useChatStore()
-const authStore = useAuthStoreWithout()
 
 const loadingRoom = ref(false)
 
 const dataSources = computed(() => chatStore.history)
-
-// onMounted(async () => {
-//   if (authStore.session == null || !authStore.session.auth || authStore.token)
-//     await handleSyncChatRoom()
-// })
-
-async function handleSyncChatRoom() {
-  loadingRoom.value = true
-  chatStore.syncHistory(() => {
-    loadingRoom.value = false
-  })
-}
 
 async function handleSelect({ uuid }: Chat.History) {
   if (isActive(uuid))

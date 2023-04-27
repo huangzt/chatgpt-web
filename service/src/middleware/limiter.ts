@@ -34,7 +34,7 @@ const limiter = rateLimit({
     // Check if user is an admin and skip rate limit
     return req.headers.isAdmin
   },
-  keyGenerator: async (req, res) => {
+  keyGenerator: async (req) => {
     // If login is enabled, use the user ID as the key, otherwise use the IP address
     if (req.headers.loginEnabled)
       return req.headers.userId

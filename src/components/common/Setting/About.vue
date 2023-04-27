@@ -39,7 +39,7 @@ let isChatGPTAPI = config.value.apiModel === 'ChatGPTAPI'
 
 watch(
   () => config.value.apiModel,
-  (newVal, oldVal) => {
+  (newVal) => {
     isChatGPTAPI = newVal === 'ChatGPTAPI'
   },
 )
