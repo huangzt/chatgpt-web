@@ -470,17 +470,18 @@ async function loadMoreMessage(event: any) {
   })
 }
 
-const handleLoadMoreMessage = debounce(loadMoreMessage, 300)
+const handleLoadMoreMessage = debounce(loadMoreMessage, 10)
 const handleSyncChat
   = debounce(() => {
-    // 直接刷 极小概率不请求
-    chatStore.syncChat({ uuid: Number(uuid) } as Chat.History, undefined, () => {
-      firstLoading.value = false
-      scrollToBottom()
-      if (inputRef.value && !isMobile.value)
-        inputRef.value?.focus()
+    chatStore.syncHistory(() => {
+      chatStore.syncChat({ uuid: Number(uuid) } as Chat.History, undefined, () => {
+        firstLoading.value = false
+        scrollToBottom()
+        if (inputRef.value && !isMobile.value)
+          inputRef.value?.focus()
+      })
     })
-  }, 200)
+  }, 10)
 
 async function handleScroll(event: any) {
   const scrollTop = event.target.scrollTop

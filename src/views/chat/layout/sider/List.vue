@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { NInput, NPopconfirm, NScrollbar, NSpin } from 'naive-ui'
 import { SvgIcon } from '@/components/common'
 import { useAppStore, useChatStore } from '@/store'
@@ -17,10 +17,10 @@ const loadingRoom = ref(false)
 
 const dataSources = computed(() => chatStore.history)
 
-onMounted(async () => {
-  if (authStore.session == null || !authStore.session.auth || authStore.token)
-    await handleSyncChatRoom()
-})
+// onMounted(async () => {
+//   if (authStore.session == null || !authStore.session.auth || authStore.token)
+//     await handleSyncChatRoom()
+// })
 
 async function handleSyncChatRoom() {
   loadingRoom.value = true
