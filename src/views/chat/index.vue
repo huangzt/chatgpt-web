@@ -443,6 +443,7 @@ function handleStop() {
 const handleSyncChat
   = debounce(() => {
     chatStore.syncHistory(() => {
+      firstLoading.value = true
       chatStore.syncChat({ uuid: Number(uuid) } as Chat.History, undefined, () => {
         firstLoading.value = false
         scrollToBottom()
@@ -496,7 +497,6 @@ const footerClass = computed(() => {
 })
 
 onMounted(() => {
-  firstLoading.value = true
   handleSyncChat()
 })
 
