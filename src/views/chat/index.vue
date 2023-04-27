@@ -457,11 +457,11 @@ async function loadMoreMessage(event: any) {
     loadingms && loadingms.destroy()
     nextTick(() => scrollTo(event.target.scrollHeight - scrollPosition))
   }, () => {
-    loadingms = ms.loading(
-      '加载中...', {
-        duration: 0,
-      },
-    )
+    // loadingms = ms.loading(
+    //   '加载中...', {
+    //     duration: 0,
+    //   },
+    // )
   }, () => {
     allmsg && allmsg.destroy()
     // allmsg = ms.warning('没有更多了', {
@@ -538,7 +538,7 @@ onMounted(() => {
 })
 
 watch(() => chatStore.active, (newVal, oldVal) => {
-  handleSyncChat()
+  // handleSyncChat()
 })
 
 onUnmounted(() => {
