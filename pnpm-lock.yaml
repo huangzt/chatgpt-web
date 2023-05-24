@@ -6,6 +6,7 @@ specifiers:
   '@commitlint/config-conventional': ^17.4.4
   '@iconify/vue': ^4.1.0
   '@traptitech/markdown-it-katex': ^3.6.0
+  '@types/chart.js': ^2.9.37
   '@types/crypto-js': ^4.1.1
   '@types/katex': ^0.16.0
   '@types/markdown-it': ^12.2.3
@@ -15,7 +16,9 @@ specifiers:
   '@vueuse/core': ^9.13.0
   autoprefixer: ^10.4.13
   axios: ^1.3.4
+  chart.js: ^4.3.0
   crypto-js: ^4.1.1
+  dayjs: ^1.11.7
   eslint: ^8.35.0
   highlight.js: ^11.7.0
   html2canvas: ^1.4.1
@@ -36,6 +39,7 @@ specifiers:
   vite: ^4.2.0
   vite-plugin-pwa: ^0.14.4
   vue: ^3.2.47
+  vue-chartjs: ^5.2.0
   vue-i18n: ^9.2.2
   vue-router: ^4.1.6
   vue-tsc: ^1.2.0
@@ -43,6 +47,8 @@ specifiers:
 dependencies:
   '@traptitech/markdown-it-katex': 3.6.0
   '@vueuse/core': 9.13.0_vue@3.2.47
+  chart.js: 4.3.0
+  dayjs: 1.11.7
   highlight.js: 11.7.0
   html2canvas: 1.4.1
   jwt-decode: 3.1.2
@@ -51,6 +57,7 @@ dependencies:
   naive-ui: 2.34.3_vue@3.2.47
   pinia: 2.0.33_hmuptsblhheur2tugfgucj7gc4
   vue: 3.2.47
+  vue-chartjs: 5.2.0_chart.js@4.3.0+vue@3.2.47
   vue-i18n: 9.2.2_vue@3.2.47
   vue-router: 4.1.6_vue@3.2.47
 
@@ -59,6 +66,7 @@ devDependencies:
   '@commitlint/cli': 17.4.4
   '@commitlint/config-conventional': 17.4.4
   '@iconify/vue': 4.1.0_vue@3.2.47
+  '@types/chart.js': 2.9.37
   '@types/crypto-js': 4.1.1
   '@types/katex': 0.16.0
   '@types/markdown-it': 12.2.3
@@ -1894,6 +1902,10 @@ packages:
     resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
     dev: false
 
+  /@kurkle/color/0.3.2:
+    resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
+    dev: false
+
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -2027,6 +2039,12 @@ packages:
 
   /@tsconfig/node16/1.0.3:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
+    dev: true
+
+  /@types/chart.js/2.9.37:
+    resolution: {integrity: sha512-9bosRfHhkXxKYfrw94EmyDQcdjMaQPkU1fH2tDxu8DWXxf1mjzWQAV4laJF51ZbC2ycYwNDvIm1rGez8Bug0vg==}
+    dependencies:
+      moment: 2.29.4
     dev: true
 
   /@types/crypto-js/4.1.1:
@@ -2799,6 +2817,13 @@ packages:
     resolution: {integrity: sha512-mKKUkUbhPpQlCOfIuZkvSEgktjPFIsZKRRbC6KWVEMvlzblj3i3asQv5ODsrwt0N3pHAEvjP8KTQPHkp0+6jOg==}
     dev: true
 
+  /chart.js/4.3.0:
+    resolution: {integrity: sha512-ynG0E79xGfMaV2xAHdbhwiPLczxnNNnasrmPEXriXsPJGjmhOBYzFVEsB65w2qMDz+CaBJJuJD0inE/ab/h36g==}
+    engines: {pnpm: '>=7'}
+    dependencies:
+      '@kurkle/color': 0.3.2
+    dev: false
+
   /chokidar/3.5.3:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==}
     engines: {node: '>= 8.10.0'}
@@ -3071,6 +3096,10 @@ packages:
   /date-fns/2.29.3:
     resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
     engines: {node: '>=0.11'}
+    dev: false
+
+  /dayjs/1.11.7:
+    resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
     dev: false
 
   /de-indent/1.0.2:
@@ -5027,6 +5056,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /moment/2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
+    dev: true
+
   /ms/2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
     dev: true
@@ -6474,6 +6507,16 @@ packages:
       vue: ^3.0.0
     dependencies:
       evtd: 0.2.4
+      vue: 3.2.47
+    dev: false
+
+  /vue-chartjs/5.2.0_chart.js@4.3.0+vue@3.2.47:
+    resolution: {integrity: sha512-d3zpKmGZr2OWHQ1xmxBcAn5ShTG917+/UCLaSpaCDDqT0U7DBsvFzTs69ZnHCgKoXT55GZDW8YEj9Av+dlONLA==}
+    peerDependencies:
+      chart.js: ^4.1.1
+      vue: ^3.0.0-0 || ^2.7.0
+    dependencies:
+      chart.js: 4.3.0
       vue: 3.2.47
     dev: false
 
