@@ -1,9 +1,8 @@
 <script setup lang='ts'>
 import type { Ref } from 'vue'
-import { computed, defineAsyncComponent, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import type { MessageReactive } from 'naive-ui'
 import { NAutoComplete, NButton, NInput, NSelect, NSpace, NSpin, useDialog, useMessage } from 'naive-ui'
 import html2canvas from 'html2canvas'
 import { Message } from './components'
@@ -34,7 +33,7 @@ const chatStore = useChatStore()
 
 const { isMobile } = useBasicLayout()
 const { addChat, updateChat, updateChatSome, getChatByUuidAndIndex } = useChat()
-const { scrollRef, scrollToBottom, scrollToBottomIfAtBottom, scrollTo } = useScroll()
+const { scrollRef, scrollToBottom, scrollToBottomIfAtBottom } = useScroll()
 
 const { uuid } = route.params as { uuid: string }
 
@@ -48,10 +47,6 @@ const firstLoading = ref<boolean>(false)
 const loading = ref<boolean>(false)
 const inputRef = ref<Ref | null>(null)
 const showPrompt = ref(false)
-
-let loadingms: MessageReactive
-let allmsg: MessageReactive
-let prevScrollTop: number
 
 // 添加PromptStore
 const promptStore = usePromptStore()
@@ -471,32 +466,6 @@ function handleStop() {
   }
 }
 
-async function loadMoreMessage(event: any) {
-  const chatIndex = chatStore.chat.findIndex(d => d.uuid === +uuid)
-  if (chatIndex <= -1 || chatStore.chat[chatIndex].data.length <= 0)
-    return
-
-  const scrollPosition = event.target.scrollHeight - event.target.scrollTop
-
-  const lastId = chatStore.chat[chatIndex].data[0].uuid
-  await chatStore.syncChat({ uuid: +uuid } as Chat.History, lastId, () => {
-    loadingms && loadingms.destroy()
-    nextTick(() => scrollTo(event.target.scrollHeight - scrollPosition))
-  }, () => {
-    loadingms = ms.loading(
-      '加载中...', {
-        duration: 0,
-      },
-    )
-  }, () => {
-    allmsg && allmsg.destroy()
-    allmsg = ms.warning('没有更多了', {
-      duration: 1000,
-    })
-  })
-}
-
-const handleLoadMoreMessage = debounce(loadMoreMessage, 300)
 const handleSyncChat
   = debounce(() => {
     chatStore.syncHistory(() => {
@@ -509,13 +478,6 @@ const handleSyncChat
       })
     })
   }, 10)
-
-async function handleScroll(event: any) {
-  const scrollTop = event.target.scrollTop
-  if (scrollTop < 50 && (scrollTop < prevScrollTop || prevScrollTop === undefined))
-    handleLoadMoreMessage(event)
-  prevScrollTop = scrollTop
-}
 
 async function handleToggleUsingContext() {
   if (!currentChatHistory.value)
