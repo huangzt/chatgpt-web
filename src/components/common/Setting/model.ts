@@ -2,9 +2,9 @@ export class ConfigState {
   timeoutMs?: number
   apiKey?: string
   accessToken?: string
+  accessTokenExpiredTime?: string
   apiBaseUrl?: string
-  apiModel?: ApiModel
-  chatModel?: CHATMODEL
+  apiModel?: APIMODEL
   reverseProxy?: string
   socksProxy?: string
   socksAuth?: string
@@ -16,9 +16,11 @@ export class ConfigState {
 }
 
 // https://platform.openai.com/docs/models/overview
-export type CHATMODEL = 'gpt-3.5-turbo' | 'gpt-3.5-turbo-0301' | 'gpt-4' | 'gpt-4-0314' | 'gpt-4-32k' | 'gpt-4-32k-0314'
+export type CHATMODEL = 'gpt-3.5-turbo' | 'gpt-3.5-turbo-0301' | 'gpt-4' | 'gpt-4-0314' | 'gpt-4-32k' | 'gpt-4-32k-0314' | 'ext-davinci-002-render-sha-mobile' | 'gpt-4-mobile' | 'gpt-4-browsing'
 
-export type ApiModel = 'ChatGPTAPI' | 'ChatGPTUnofficialProxyAPI' | undefined
+export class UserConfig {
+  chatModel?: CHATMODEL
+}
 
 export class SiteConfig {
   siteTitle?: string
@@ -58,4 +60,64 @@ export class AuditConfig {
   textType?: TextAudioType
   customizeEnabled?: boolean
   sensitiveWords?: string
+}
+
+export enum Status {
+  Normal = 0,
+  Deleted = 1,
+  InversionDeleted = 2,
+  ResponseDeleted = 3,
+  PreVerify = 4,
+  AdminVerify = 5,
+  Disabled = 6,
+}
+
+export enum UserRole {
+  Admin = 0,
+  User = 1,
+  Guest = 2,
+}
+
+export class KeyConfig {
+  _id?: string
+  key: string
+  keyModel: APIMODEL
+  chatModels: CHATMODEL[]
+  userRoles: UserRole[]
+  status: Status
+  remark: string
+  constructor(key: string, keyModel: APIMODEL, chatModels: CHATMODEL[], userRoles: UserRole[], remark: string) {
+    this.key = key
+    this.keyModel = keyModel
+    this.chatModels = chatModels
+    this.userRoles = userRoles
+    this.status = Status.Normal
+    this.remark = remark
+  }
+}
+
+export type APIMODEL = 'ChatGPTAPI' | 'ChatGPTUnofficialProxyAPI' | undefined
+
+export const apiModelOptions = ['ChatGPTAPI', 'ChatGPTUnofficialProxyAPI'].map((model: string) => {
+  return {
+    label: model,
+    key: model,
+    value: model,
+  }
+})
+
+export const userRoleOptions = Object.values(UserRole).filter(d => isNaN(Number(d))).map((role) => {
+  return {
+    label: role as string,
+    key: role as string,
+    value: UserRole[role as keyof typeof UserRole],
+  }
+})
+
+export class UserInfo {
+  _id?: string
+  roles: UserRole[]
+  constructor(roles: UserRole[]) {
+    this.roles = roles
+  }
 }

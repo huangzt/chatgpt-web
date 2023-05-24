@@ -19,6 +19,10 @@
 
 [✓] Set unique prompts for each chat room
 
+[✓] Users manager
+
+[✓] Random Key
+
 </br>
 
 ## Screenshots
@@ -29,6 +33,8 @@
 ![cover2](./docs/c2.png)
 ![cover3](./docs/basesettings.jpg)
 ![cover3](./docs/prompt_en.jpg)
+![cover3](./docs/user-manager.jpg)
+![cover3](./docs/key-manager-en.jpg)
 
 - [ChatGPT Web](#chatgpt-web)
 	- [Introduction](#introduction)
@@ -190,7 +196,6 @@ pnpm dev
 - `OPENAI_ACCESS_TOKEN` one of two, `OPENAI_API_KEY` takes precedence when both are present
 - `OPENAI_API_BASE_URL` optional, available when `OPENAI_API_KEY` is set
 - `OPENAI_API_MODEL`  `ChatGPTAPI` OR `ChatGPTUnofficialProxyAPI`
-- `OPENAI_CHAT_MODEL` gpt-4 gpt-3.5-turbo-0301
 - `API_REVERSE_PROXY` optional, available when `OPENAI_ACCESS_TOKEN` is set [Reference](#introduction)
 - `AUTH_SECRET_KEY` Access Password，optional
 - `TIMEOUT_MS` timeout, in milliseconds, optional
@@ -243,8 +248,6 @@ services:
       OPENAI_API_BASE_URL: xxxx
       # ChatGPTAPI 或者 ChatGPTUnofficialProxyAPI
       OPENAI_API_MODEL: xxxx
-      # gpt-4 gpt-3.5-turbo-0301
-      OPENAI_CHAT_MODEL: xxxx
       # reverse proxy, optional
       API_REVERSE_PROXY: xxx
       # timeout, in milliseconds, optional

@@ -2,8 +2,8 @@ import { ObjectId } from 'mongodb'
 import * as dotenv from 'dotenv'
 import type { TextAuditServiceProvider } from 'src/utils/textAudit'
 import { isNotEmptyString, isTextAuditServiceProvider } from '../utils/is'
-import { AuditConfig, Config, MailConfig, SiteConfig, TextAudioType } from './model'
-import { getConfig } from './mongo'
+import { AuditConfig, CHATMODELS, Config, KeyConfig, MailConfig, SiteConfig, TextAudioType, UserRole } from './model'
+import { getConfig, getKeys, upsertKey } from './mongo'
 
 dotenv.config()
 
@@ -33,7 +33,6 @@ export async function getOriginConfig() {
       process.env.OPENAI_ACCESS_TOKEN,
       process.env.OPENAI_API_BASE_URL,
       process.env.OPENAI_API_MODEL || 'ChatGPTAPI',
-      process.env.OPENAI_CHAT_MODEL || 'gpt-3.5-turbo',
       process.env.API_REVERSE_PROXY,
       (process.env.SOCKS_PROXY_HOST && process.env.SOCKS_PROXY_PORT)
         ? (`${process.env.SOCKS_PROXY_HOST}:${process.env.SOCKS_PROXY_PORT}`)
@@ -72,8 +71,6 @@ export async function getOriginConfig() {
     if (config.siteConfig.registerReview === undefined)
       config.siteConfig.registerReview = process.env.REGISTER_REVIEW === 'true'
   }
-  if (!isNotEmptyString(config.chatModel))
-    config.chatModel = 'gpt-3.5-turbo'
   if (config.apiModel !== 'ChatGPTAPI' && config.apiModel !== 'ChatGPTUnofficialProxyAPI') {
     if (isNotEmptyString(config.accessToken))
       config.apiModel = 'ChatGPTUnofficialProxyAPI'
@@ -119,4 +116,52 @@ function getTextAuditServiceOptionFromString(value: string): TextAudioType {
 export function clearConfigCache() {
   cacheExpiration = 0
   cachedConfig = null
+}
+
+let apiKeysCachedConfig: KeyConfig[] | undefined
+let apiKeysCacheExpiration = 0
+
+export async function getCacheApiKeys(): Promise<KeyConfig[]> {
+  const now = Date.now()
+  if (apiKeysCachedConfig && apiKeysCacheExpiration > now)
+    return Promise.resolve(apiKeysCachedConfig)
+
+  const loadedConfig = (await getApiKeys()).keys
+
+  apiKeysCachedConfig = loadedConfig
+  apiKeysCacheExpiration = now + 10 * 60 * 1000
+
+  return Promise.resolve(apiKeysCachedConfig)
+}
+
+export function clearApiKeyCache() {
+  apiKeysCacheExpiration = 0
+  getCacheApiKeys()
+}
+
+export async function getApiKeys() {
+  const result = await getKeys()
+  if (result.keys.length <= 0) {
+    const config = await getCacheConfig()
+    if (config.apiModel === 'ChatGPTAPI')
+      result.keys.push(await upsertKey(new KeyConfig(config.apiKey, 'ChatGPTAPI', [], [], '')))
+
+    if (config.apiModel === 'ChatGPTUnofficialProxyAPI')
+      result.keys.push(await upsertKey(new KeyConfig(config.accessToken, 'ChatGPTUnofficialProxyAPI', [], [], '')))
+
+    result.total++
+  }
+  result.keys.forEach((key) => {
+    if (key.userRoles == null || key.userRoles.length <= 0) {
+      key.userRoles.push(UserRole.Admin)
+      key.userRoles.push(UserRole.User)
+      key.userRoles.push(UserRole.Guest)
+    }
+    if (key.chatModels == null || key.chatModels.length <= 0) {
+      CHATMODELS.forEach((chatModel) => {
+        key.chatModels.push(chatModel)
+      })
+    }
+  })
+  return result
 }
